@@ -1,10 +1,19 @@
 import os
 import re
 
-class ContactFinder:
+class ContactFinder(object):
 	
 	def __init__(self):
-		self.pattern = re.compile('^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$')
+		self.CONTACT_NUMBER = re.compile(r'''
+					    ^  # start of line
+					    (?:
+					      (?:\+|0{0,2})91(\s*[\ -]\s*)?  # country code
+					      |[0]?  # or leading zero
+					    )?
+					    [789]\d{9}  # ten digits starting 7, 8 or 9
+					    |(\d[ -]?){10}\d  # or eleven digits with a separator
+					    $  # end of line
+					''', re.VERBOSE)
 
 	def traverse(self,dir_path):
 		for root, dirs, files in os.walk(dir_path):
@@ -18,8 +27,8 @@ class ContactFinder:
 
 	def print_contact(self, filename):
 		for contact in filename:
-			if self.pattern.match(contact):
-				print contact		
+			if self.CONTACT_NUMBER.match(contact):
+				print contact.rstrip()		
 
 contact = ContactFinder()
 contact.traverse('path/to/directory')
