@@ -22,4 +22,4 @@ class ContactFinder:
 				print contact		
 
 contact = ContactFinder()
-contact.traverse('/home/sinscary/Documents/angular')
+contact.traverse('path/to/directory')
